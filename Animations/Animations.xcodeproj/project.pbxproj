@@ -14,6 +14,9 @@
 		04291072222EBFDA003125A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04291070222EBFD9003125A8 /* LaunchScreen.storyboard */; };
 		04773097222FD4ED0043061D /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04773096222FD4ED0043061D /* StartViewController.swift */; };
 		04773099223000230043061D /* PropertyAnimatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04773098223000230043061D /* PropertyAnimatorViewController.swift */; };
+		049CEE1E2231599F00FE7A95 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049CEE1D2231599F00FE7A95 /* Extensions.swift */; };
+		04D6D24E2230199E00935841 /* DynamicAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D6D24D2230199E00935841 /* DynamicAnimationViewController.swift */; };
+		04D6D250223019E600935841 /* BehaviorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D6D24F223019E600935841 /* BehaviorsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		04291073222EBFDA003125A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04773096222FD4ED0043061D /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		04773098223000230043061D /* PropertyAnimatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyAnimatorViewController.swift; sourceTree = "<group>"; };
+		049CEE1D2231599F00FE7A95 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		04D6D24D2230199E00935841 /* DynamicAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicAnimationViewController.swift; sourceTree = "<group>"; };
+		04D6D24F223019E600935841 /* BehaviorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehaviorsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +72,9 @@
 				04773096222FD4ED0043061D /* StartViewController.swift */,
 				04291069222EBFD8003125A8 /* AnimateViewController.swift */,
 				04773098223000230043061D /* PropertyAnimatorViewController.swift */,
+				04D6D24D2230199E00935841 /* DynamicAnimationViewController.swift */,
+				04D6D24F223019E600935841 /* BehaviorsViewController.swift */,
+				049CEE1D2231599F00FE7A95 /* Extensions.swift */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -145,6 +154,9 @@
 				04291068222EBFD8003125A8 /* AppDelegate.swift in Sources */,
 				04773099223000230043061D /* PropertyAnimatorViewController.swift in Sources */,
 				04773097222FD4ED0043061D /* StartViewController.swift in Sources */,
+				04D6D250223019E600935841 /* BehaviorsViewController.swift in Sources */,
+				04D6D24E2230199E00935841 /* DynamicAnimationViewController.swift in Sources */,
+				049CEE1E2231599F00FE7A95 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,6 +36,7 @@ class PropertyAnimatorViewController: UIViewController {
         }
     }
     
+    // MARK: - Life cyrcle
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -76,7 +77,7 @@ class PropertyAnimatorViewController: UIViewController {
     
     // MARK: - Components configuration
     private func configure() {
-        addGesture(for: coloredView, with: #selector(dismissView(gesture:)))
+        coloredView.addTapGesture(for: self, with: #selector(dismissView(gesture:)))
         configureButtons()
     }
     
@@ -85,12 +86,6 @@ class PropertyAnimatorViewController: UIViewController {
             button.layer.cornerRadius = button.frame.height / 2
             button.layer.masksToBounds = true
         }
-    }
-    
-    // MARK: - Gesture configuration
-    private func addGesture(for view: UIView, with action: Selector?) {
-        let tapGesture = UITapGestureRecognizer(target: self, action: action)
-        view.addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Dismiss view controller

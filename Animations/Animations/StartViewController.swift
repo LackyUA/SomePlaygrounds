@@ -10,7 +10,7 @@ import UIKit
 
 class StartViewController: UIViewController {
     
-    private let buttonTitles: [String] = ["Animate", "Property Animator", "Dynamic Animation", "Behaviors"]
+    private let buttonTitles: [String] = ["Animate", "Property Animator", "Dynamic Animation", "Behaviors", "Transitions"]
 
     @IBOutlet private var collectionOfButtons: [UIButton]!
     @IBOutlet private weak var startLabel: UILabel!

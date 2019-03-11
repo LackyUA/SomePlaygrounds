@@ -17,7 +17,7 @@ class AnimateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureComponents()
-        addGesture(for: self.view, with: #selector(chainingAnimation(gesture:)))
+        self.view.addTapGesture(for: self, with: #selector(chainingAnimation(gesture:)))
     }
     
     // MARK: - Animations
@@ -34,7 +34,7 @@ class AnimateViewController: UIViewController {
                 UIView.animate(withDuration: 1.0, delay: 0.3, animations: {
                     self.secondAnimation()
                 }, completion: { (_) in
-                    self.addGesture(for: self.view, with: #selector(self.dismissView(gesture:)))
+                    self.view.addTapGesture(for: self, with: #selector(self.dismissView(gesture:)))
                 })
             }
         default:
@@ -77,12 +77,6 @@ class AnimateViewController: UIViewController {
         circle.layer.borderWidth = 2.0
     }
     
-    // MARK: - Gesture configuration
-    private func addGesture(for view: UIView, with action: Selector?) {
-        let tapGesture = UITapGestureRecognizer(target: self, action: action)
-        view.addGestureRecognizer(tapGesture)
-    }
-    
     // MARK: - Dismiss view controller
     @objc private func dismissView(gesture: UITapGestureRecognizer) {
         UIView.animate(withDuration: 1.0, animations: {
@@ -93,4 +87,3 @@ class AnimateViewController: UIViewController {
     }
 
 }
-
