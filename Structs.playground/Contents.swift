@@ -1,6 +1,6 @@
-import UIKit
+import Foundation
 
-// Simple structs with replacing values in case of mutating.
+/// Simple structs with replacing values in case of mutating.
 struct Point {
     var x: Int
     var y: Int
@@ -84,5 +84,61 @@ var screens = [Rectangle(height: 480, width: 320)] {
 
 screens[0].origin.x += 100
 
-// Copy-on-write structs.
+/// Copy-on-write structs.
 
+// Collections
+var x = [1,2,3]
+var y = x
+
+x.append(5)
+y.removeLast()
+x
+y
+
+// NSMutableData
+var input: [UInt8] = [0x0b,0xad,0xf0,0x0d]
+var other: [UInt8] = [0x0d]
+
+var d = Data(_: input)
+var e = d
+d.append(contentsOf: other)
+
+// After appending other to d it made copy of e and save it to d with new value.
+d
+e
+
+var f = NSMutableData(bytes: &input, length: input.count)
+var g = f
+f.append(&other, length: other.count)
+
+// In this case g and f refering to the same object in memory
+f
+g
+f === g
+
+// If we naively wrap NSMutableData in a struct, we don’t get value semantics automatically
+struct MyDataStillReferenced {
+    var _data: NSMutableData
+    
+    init(_ data: NSData) {
+        self._data = data.mutableCopy() as! NSMutableData
+    }
+}
+
+extension MyDataStillReferenced {
+    func append(_ other: MyDataStillReferenced) {
+        _data.append(other._data as Data)
+    }
+}
+
+let theData = NSData(base64Encoded: "wAEP/w==", options: [])!
+let a = MyDataStillReferenced(theData)
+let b = a
+a._data === b._data
+
+a.append(a)
+b
+a._data === b._data
+
+/// Methods to implement Copy-On-Write
+/// Copy-On-Write (The Expensive Way)
