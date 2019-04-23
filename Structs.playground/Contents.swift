@@ -225,3 +225,59 @@ empty // <c0010fff c0010fff c0010fff c0010fff c0010fff>
 emptyCopy // <>
 
 /// Copy-On-Write Gotchas.
+
+// Create empty class and struct with mutating method for checking whether or not the reference should be copied.
+final class Empty {}
+
+struct COWStruct {
+    var ref = Empty()
+    
+    mutating func change() -> String {
+        if isKnownUniquelyReferenced(&ref) {
+            return "No copy"
+        } else {
+            return "Copy"
+        }
+        
+        // Perform actual changes
+    }
+}
+
+// No copies if its not shared reference
+var i = COWStruct()
+i.change()
+
+// It creates copy if the reference is shred
+var originalCOWStruct = COWStruct()
+var copyCOWStruct = originalCOWStruct
+originalCOWStruct.change()
+
+// Same logic for adding value to array and then create new referenced value.
+var structsArray = [COWStruct()]
+structsArray[0].change()
+
+var cop = structsArray[0]
+cop.change()
+
+var dict = ["key": COWStruct()]
+dict["key"]?.change()
+
+// When we directly access it, we get the copy-on-write optimization,
+// but when we access it indirectly through a subscript, a copy is made.
+struct ContainerStruct<A> {
+    var storage: A
+    
+    subscript(s: String) -> A {
+        get {
+            return storage
+        }
+        
+        set {
+            storage = newValue
+        }
+    }
+}
+
+var h = ContainerStruct(storage: COWStruct())
+h["test"].change()
+h.storage.change()
