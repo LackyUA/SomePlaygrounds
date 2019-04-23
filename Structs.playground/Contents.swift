@@ -86,7 +86,7 @@ screens[0].origin.x += 100
 
 /// Copy-on-write structs.
 
-// Collections
+// Collections.
 var x = [1,2,3]
 var y = x
 
@@ -95,7 +95,7 @@ y.removeLast()
 x
 y
 
-// NSMutableData
+// Simple array.
 var input: [UInt8] = [0x0b,0xad,0xf0,0x0d]
 var other: [UInt8] = [0x0d]
 
@@ -107,16 +107,17 @@ d.append(contentsOf: other)
 d
 e
 
+// NSMutableData
 var f = NSMutableData(bytes: &input, length: input.count)
 var g = f
 f.append(&other, length: other.count)
 
-// In this case g and f refering to the same object in memory
+// In this case g and f refering to the same object in memory.
 f
 g
 f === g
 
-// If we naively wrap NSMutableData in a struct, we don’t get value semantics automatically
+// If we wrap NSMutableData in a struct, we don’t get value semantics automatically.
 struct MyDataStillReferenced {
     var _data: NSMutableData
     
@@ -140,5 +141,37 @@ a.append(a)
 b
 a._data === b._data
 
-/// Methods to implement Copy-On-Write
-/// Copy-On-Write (The Expensive Way)
+/// Methods to implement Copy-On-Write.
+/// Copy-On-Write (The Expensive Way).
+
+// Making _data private and mutating it through a computed property _dataForWriting.
+struct MyData {
+    fileprivate var _data: NSMutableData
+    var _dataForWriting: NSMutableData {
+        mutating get {
+            _data = _data.mutableCopy() as! NSMutableData
+            return _data
+        }
+    }
+    
+    init(_ data: NSData) {
+        self._data = data.mutableCopy() as! NSMutableData
+    }
+}
+
+extension MyData {
+    mutating func append(_ newElement: MyData) {
+        _dataForWriting.append(newElement._data as Data)
+    }
+}
+
+// Struct MyData has value semantics and we can copy data.
+let theNewData = NSData(base64Encoded: "wAEP/w==", options: [])!
+var n = MyData(theNewData)
+let m = n
+n._data === m._data
+
+n.append(n)
+n._data === m._data
+
+/// Copy-On-Write (The Efficient Way).
