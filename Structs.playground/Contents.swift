@@ -145,7 +145,7 @@ a._data === b._data
 /// Copy-On-Write (The Expensive Way).
 
 // Making _data private and mutating it through a computed property _dataForWriting.
-struct MyData {
+struct MyExpensiveData {
     fileprivate var _data: NSMutableData
     var _dataForWriting: NSMutableData {
         mutating get {
@@ -159,15 +159,15 @@ struct MyData {
     }
 }
 
-extension MyData {
-    mutating func append(_ newElement: MyData) {
+extension MyExpensiveData {
+    mutating func append(_ newElement: MyExpensiveData) {
         _dataForWriting.append(newElement._data as Data)
     }
 }
 
 // Struct MyData has value semantics and we can copy data.
 let theNewData = NSData(base64Encoded: "wAEP/w==", options: [])!
-var n = MyData(theNewData)
+var n = MyExpensiveData(theNewData)
 let m = n
 n._data === m._data
 
@@ -175,3 +175,53 @@ n.append(n)
 n._data === m._data
 
 /// Copy-On-Write (The Efficient Way).
+
+final class Box<A> {
+    var unbox: A
+    
+    init(_ value: A) { self.unbox = value }
+}
+
+var k = Box(NSMutableData())
+isKnownUniquelyReferenced(&k)
+
+var l = k
+isKnownUniquelyReferenced(&k)
+
+struct MyEfficientData {
+    fileprivate var _data: Box<NSMutableData>
+    
+    var _dataForWriting: NSMutableData {
+        mutating get {
+            if !isKnownUniquelyReferenced(&_data) {
+                _data = Box(_data.unbox.mutableCopy() as! NSMutableData)
+                print("Making a copy")
+            }
+            
+            return _data.unbox
+        }
+    }
+    
+    init(_ data: NSData) {
+        self._data = Box(data.mutableCopy() as! NSMutableData)
+    }
+}
+
+extension MyEfficientData {
+    mutating func append(_ newElement: MyEfficientData) {
+        _dataForWriting.append(newElement._data.unbox as Data)
+    }
+}
+
+let someBytes = MyEfficientData(NSData(base64Encoded: "wAEP/w==", options: [])!)
+var empty = MyEfficientData(NSData())
+var emptyCopy = empty
+
+for _ in 0..<5 {
+    empty.append(someBytes)
+}
+
+empty // <c0010fff c0010fff c0010fff c0010fff c0010fff>
+emptyCopy // <>
+
+/// Copy-On-Write Gotchas.
